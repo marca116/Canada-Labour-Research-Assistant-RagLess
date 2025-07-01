@@ -32,7 +32,7 @@ if __name__ == "__main__":
     import os
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # Add the parent directory to sys.path
 
-    from config import vLLMRAGConfig
+    from config import vLLMModelConfig
 
     model = "meta-llama/Llama-3.2-3B-Instruct"
 
@@ -44,8 +44,8 @@ if __name__ == "__main__":
         "content": "What are Canada's primary economic drivers?"
     }]
 
-    answer = get_vllm_answer(chat_model=model, messages=message, hyperparams=vLLMRAGConfig.HyperparametersAccuracyConfig)
+    answer = get_vllm_answer(chat_model=model, messages=message, hyperparams=vLLMModelConfig.HyperparametersAccuracyConfig)
     print(answer)
 
-    for word in get_vllm_answer_stream(chat_model=model, messages=message, hyperparams=vLLMRAGConfig.HyperparametersAccuracyConfig):
+    for word in get_vllm_answer_stream(chat_model=model, messages=message, hyperparams=vLLMModelConfig.HyperparametersAccuracyConfig):
         print(word, end="")

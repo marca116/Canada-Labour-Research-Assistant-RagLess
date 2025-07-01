@@ -3,7 +3,7 @@ import logging
 
 import streamlit as st
 
-from config import BaseChatbotInterfaceConfig, ChatbotInterfaceConfig, vLLMChatbotInterfaceConfig, vLLMRAGConfig, OllamaRAGConfig
+from config import BaseChatbotInterfaceConfig, ChatbotInterfaceConfig, vLLMChatbotInterfaceConfig, vLLMModelConfig, OllamaModelConfig
 from tools import retrieve_database_stream
 from translations import Translator
 
@@ -14,7 +14,7 @@ class App:
                  engine="ollama", 
                  eval_mode=False, 
                  is_remote=False,
-                 hyperparams=OllamaRAGConfig.HyperparametersAccuracyConfig):
+                 hyperparams=OllamaModelConfig.HyperparametersAccuracyConfig):
         self.eval_mode = eval_mode
         self.is_remote = is_remote
         self.engine = engine
@@ -220,7 +220,7 @@ if __name__ == '__main__':
     is_vllm = args.mode in ["vllm"]
     is_remote = args.mode in ["remote", "evaluation_remote", "profiling_remote"]
     location_mode_name = "Remote" if is_remote else "Local"
-    hyperparams = vLLMRAGConfig.HyperparametersAccuracyConfig if is_vllm else OllamaRAGConfig.HyperparametersAccuracyConfig
+    hyperparams = vLLMModelConfig.HyperparametersAccuracyConfig if is_vllm else OllamaModelConfig.HyperparametersAccuracyConfig
     engine = "vllm" if is_vllm else "ollama"
 
     app = App(is_remote=is_remote, engine=engine, hyperparams=hyperparams)

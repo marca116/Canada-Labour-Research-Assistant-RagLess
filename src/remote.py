@@ -46,12 +46,12 @@ if __name__ == "__main__":
     import sys
     import os
     sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))) # Add the parent directory to sys.path
-    from config import OllamaRAGConfig
+    from config import OllamaModelConfig
 
     for token in get_llm_answer_remote_stream(chat_model="meta-llama/Llama-4-Scout-17B-16E-Instruct",
                                               messages=[{   
                                                 "role": "user",
                                                 "content": "What are Ontario's primary economic drivers?"
                                                 }],
-                                              hyperparams=OllamaRAGConfig.HyperparametersAccuracyConfig):
+                                              hyperparams=OllamaModelConfig.HyperparametersAccuracyConfig):
         print(token, end="")

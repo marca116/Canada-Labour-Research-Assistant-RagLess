@@ -59,7 +59,7 @@ class ConsoleConfig:
     verbose = True
 
 @dataclass
-class RAGConfig:
+class ModelConfig:
     '''
     Maximum context length for all models.
     '''
@@ -87,7 +87,7 @@ class RAGConfig:
     max_allowed_context_size_remote = None # None means no limit
 
 @dataclass
-class OllamaRAGConfig:
+class OllamaModelConfig:
     '''
     See Ollama's accepted parameters https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
     '''
@@ -102,7 +102,7 @@ class OllamaRAGConfig:
     }
 
 @dataclass
-class vLLMRAGConfig:
+class vLLMModelConfig:
     '''
     See vLLM's accepted parameters list: https://docs.vllm.ai/en/v0.8.3/serving/openai_compatible_server.html#id7   
     '''

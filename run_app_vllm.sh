@@ -15,11 +15,11 @@ export DO_NOT_TRACK=1                               # https://docs.vllm.ai/en/v0
 # run scripts/int4_quantization.py to quantize your model, then add '-W4A16-G128' suffix to the model name. Add --quantization compressed-tensors and serve.
 
 # fetch the engine arguments specified in the config file
-engine_args=$(python3 -c 'from config import vLLMRAGConfig; print(vLLMRAGConfig.EngineArgs["model_name"]); \
-                                                            print(vLLMRAGConfig.EngineArgs["ctx_window"]); \
-                                                            print(vLLMRAGConfig.EngineArgs["gpu_memory_utilization"]); \
-                                                            print(vLLMRAGConfig.EngineArgs["max_num_batched_tokens"]); \
-                                                            print(vLLMRAGConfig.EngineArgs["max_num_seqs"])')
+engine_args=$(python3 -c 'from config import vLLMModelConfig; print(vLLMModelConfig.EngineArgs["model_name"]); \
+                                                            print(vLLMModelConfig.EngineArgs["ctx_window"]); \
+                                                            print(vLLMModelConfig.EngineArgs["gpu_memory_utilization"]); \
+                                                            print(vLLMModelConfig.EngineArgs["max_num_batched_tokens"]); \
+                                                            print(vLLMModelConfig.EngineArgs["max_num_seqs"])')
 params=($engine_args)
 model_name="${params[0]}"
 ctx="${params[1]}"

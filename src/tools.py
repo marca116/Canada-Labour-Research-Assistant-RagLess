@@ -5,7 +5,7 @@ import time
 
 import streamlit as st
 
-from config import ChatbotInterfaceConfig, PromptTemplateType, OllamaRAGConfig, ConsoleConfig
+from config import ChatbotInterfaceConfig, PromptTemplateType, OllamaModelConfig, ConsoleConfig
 from local import get_ollama_answer_local, get_ollama_answer_local_stream
 from local_vllm import get_vllm_answer, get_vllm_answer_stream
 from remote import get_llm_answer_remote, get_llm_answer_remote_stream
@@ -130,7 +130,7 @@ def retrieve_database_local(database_question,
                       language,
                       is_remote=False,
                       chat_model=None,
-                      hyperparams=OllamaRAGConfig.HyperparametersAccuracyConfig,
+                      hyperparams=OllamaModelConfig.HyperparametersAccuracyConfig,
                       custom_system_prompt=None,
                       previous_messages=None,
                       nb_previous_questions=1,
@@ -156,7 +156,7 @@ def retrieve_database_stream(database_question,
                       language,
                       is_remote=False,
                       chat_model=None,
-                      hyperparams=OllamaRAGConfig.HyperparametersAccuracyConfig,
+                      hyperparams=OllamaModelConfig.HyperparametersAccuracyConfig,
                       custom_system_prompt=None,
                       previous_messages=None,
                       nb_previous_questions=1,
@@ -178,7 +178,7 @@ def retrieve_database_stream(database_question,
     
 
 if __name__ == "__main__":
-    from config import vLLMRAGConfig, vLLMChatbotInterfaceConfig
+    from config import vLLMModelConfig, vLLMChatbotInterfaceConfig
 
     start_time = time.time()
     answer, _, _, _, original_answer = retrieve_database_local(
@@ -186,7 +186,7 @@ if __name__ == "__main__":
         "en", 
         is_remote=False, 
         chat_model=vLLMChatbotInterfaceConfig.default_model_local,
-        hyperparams=vLLMRAGConfig.HyperparametersAccuracyConfig,
+        hyperparams=vLLMModelConfig.HyperparametersAccuracyConfig,
         engine="vllm"
     )
     end_time = time.time()
