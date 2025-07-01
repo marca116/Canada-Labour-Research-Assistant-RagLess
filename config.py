@@ -59,34 +59,6 @@ class ConsoleConfig:
     verbose = True
 
 @dataclass
-class ModelConfig:
-    '''
-    Maximum context length for all models.
-    '''
-
-    model_max_context_length = {
-        "meta-llama/Llama-4-Scout-17B-16E-Instruct": 327680,
-        "meta-llama/Llama-3.2-3B-Instruct": 131072,
-        "google/gemma-2-9b": 131072,
-        "gemma3n:e4b":32768,
-        "gemma3:1b": 32768,
-        "gemma3:4b": 131072,
-        "gemma3:12b": 131072,
-        "granite3-dense:8b": 4096,
-        "llama3.2:latest": 131072,
-        "llama3.2-3B-instruct-q4-k-l:latest": 131072,
-        "llama3.2-3B-instruct-q4-k-m:latest": 131072,
-        "Llama-3.2-3B-Instruct-W4A16-G128": 131072,
-        "mistral-small:24b-instruct-2501-q4_K_M": 32768,
-        "mistral-small3.1": 131072,
-        "mistral-nemo": 128000
-    }
-    # Maximum allowed context size in tokens for all models (unless the model has a lower limit). 
-    # Will never go above this limit, even if the model can handle more.
-    max_allowed_context_size_local = 32768 
-    max_allowed_context_size_remote = None # None means no limit
-
-@dataclass
 class OllamaModelConfig:
     '''
     See Ollama's accepted parameters https://github.com/ollama/ollama/blob/main/docs/modelfile.md#valid-parameters-and-values
