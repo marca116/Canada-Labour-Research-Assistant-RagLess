@@ -33,7 +33,6 @@ def retrieve_database(database_question,
                       hyperparams,
                       custom_system_prompt,
                       previous_messages,
-                      previous_question_chunks,
                       nb_previous_questions=1):
 
     if chat_model is None:
@@ -57,7 +56,7 @@ def retrieve_database(database_question,
     messages = []
     previous_questions_and_answers = []
 
-    if nb_previous_questions > 0 and previous_messages and previous_question_chunks and len(previous_messages) >= 2:
+    if nb_previous_questions > 0 and previous_messages and len(previous_messages) >= 2:
         previous_question_text = PromptTemplateType.previous_question_en if language == "en" else PromptTemplateType.previous_question_fr
         previous_answer_text = PromptTemplateType.previous_answer_en if language == "en" else PromptTemplateType.previous_answer_fr
 
@@ -83,47 +82,10 @@ def retrieve_database(database_question,
                 previous_questions_and_answers.insert(0, previous_answer)
                 nb_answers += 1
 
-    num_ctx = hyperparams.get("num_ctx")
-
-    # Only update the num_ctx if it's not None (always the case for vLLM)
-    if num_ctx is not None:
-        hyperparams["num_ctx"] = num_ctx
-
     # List of all messages to be sent to the LLM
     messages = previous_questions_and_answers + [prompt_message]
     
     return messages, chat_model, hyperparams
-
-def get_previous_question_chunks(previous_messages, nb_previous_questions=1):
-    if nb_previous_questions <= 0 or not previous_messages:
-        return []
-
-    previous_question_chunks = []
-    nb_prev_assistant_messages = 0
-    # Get chunks from the last nb_previous_questions assistant messagesm starting from the last
-    for message in previous_messages[::-1]:
-        if nb_prev_assistant_messages >= nb_previous_questions:
-            break
-
-        if message["role"] == "user":
-            continue
-
-        chunks = message.get("chunks", [])
-        # Add the chunks to the previous question chunks, at the beginning of the list
-        for chunk in chunks:
-            previous_question_chunks.insert(0, chunk)
-
-        nb_prev_assistant_messages += 1
-
-    return previous_question_chunks
-
-def print_context_info(total_used_tokens, hyperparams):
-    if ConsoleConfig.verbose:
-        if total_used_tokens is not None:
-            print(f"Total used tokens: {total_used_tokens}")
-        num_ctx = hyperparams.get("num_ctx")
-        if num_ctx is not None:
-            print(f"Context window size: {num_ctx}")
 
 @st.cache_data(show_spinner=False, ttl=600)
 def retrieve_database_local(database_question,
@@ -136,11 +98,9 @@ def retrieve_database_local(database_question,
                       nb_previous_questions=1,
                       engine="ollama"):
     
-    previous_question_chunks = get_previous_question_chunks(previous_messages, nb_previous_questions)
-    
     messages, chat_model, hyperparams = retrieve_database(
         database_question, language, is_remote, chat_model, hyperparams, 
-        custom_system_prompt, previous_messages, previous_question_chunks, nb_previous_questions
+        custom_system_prompt, previous_messages, nb_previous_questions
     )
 
     if is_remote:

@@ -179,9 +179,6 @@ class App:
         if "messages" not in st.session_state:
             st.session_state.messages = []
 
-        if "previous_question_chunks" not in st.session_state:
-            st.session_state.previous_question_chunks = []
-
         previous_messages = []
 
         for idx, message in enumerate(st.session_state.messages):
