@@ -12,10 +12,8 @@ logging.basicConfig(filename='.debugging/debugging.log', level=logging.DEBUG)
 class App:
     def __init__(self, 
                  engine="ollama", 
-                 eval_mode=False, 
                  is_remote=False,
                  hyperparams=OllamaModelConfig.HyperparametersAccuracyConfig):
-        self.eval_mode = eval_mode
         self.is_remote = is_remote
         self.engine = engine
         self.hyperparams = hyperparams
@@ -112,7 +110,7 @@ class App:
                 on_click='ignore'
             )
 
-        def display_retrieval_messages(eval_mode=self.eval_mode):
+        def display_retrieval_messages():
             if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
 
                 with st.spinner(self.translator.get('processing'), show_time=False):
@@ -203,7 +201,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(allow_abbrev=True)
     parser.add_argument("mode", # as per [this issue](https://discuss.streamlit.io/t/command-line-arguments/386/3) keyword args don't work
                         help="Choose the mode in which you want to run this app",
-                        choices=["local", "remote", "evaluation_local", "evaluation_remote", "profiling_local", "profiling_remote", "vllm"],
+                        choices=["local", "remote", "vllm"],
                         type=str,
                         nargs='?',
                         default=default_mode)
@@ -215,7 +213,7 @@ if __name__ == '__main__':
         st.session_state.profiling_counter = 0
     
     is_vllm = args.mode in ["vllm"]
-    is_remote = args.mode in ["remote", "evaluation_remote", "profiling_remote"]
+    is_remote = args.mode in ["remote"]
     location_mode_name = "Remote" if is_remote else "Local"
     hyperparams = vLLMModelConfig.HyperparametersAccuracyConfig if is_vllm else OllamaModelConfig.HyperparametersAccuracyConfig
     engine = "vllm" if is_vllm else "ollama"
