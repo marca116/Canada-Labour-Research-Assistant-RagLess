@@ -40,28 +40,11 @@ class vLLMChatbotInterfaceConfig(BaseChatbotInterfaceConfig):
 class PromptTemplateType:
     minimalist: str = """You are a helpful assistant. 
 You recognize when you do not know the answer and ask for clarifications when needed."""
-    structured_with_context_no_direct_quotations: str = """Answer the question based on the previous documents.
-Structure your responses with section headers and subtitles."""
     # Avoid adding unecessary spaces in the prompt
-    structured_with_context_local: str = """Answer the question based on the previous documents.
-Structure your responses with section headers and subtitles.
-Use quotation marks to directly quote relevant passages from the text, giving an in depth analysis of how the quote relates to the question.
-Include at least 1 quotation in your answer, ideally more.
-Do not refer to examples from the source documents, unless you quote them first.
-Those passages should be quoted word for word, avoiding the use of ellipsis to shorten the quote.
-Avoid quoting passages inline with your text, instead quote them on a new line.
-Do not quote the same passage twice.
-Do not list the quotes you used at the end of your answer.
-"""
-    structured_with_context_remote: str = """Answer the question based on the previous source documents.
-Structure your responses with section headers and subtitles.
-Use quotation marks to directly quote relevant passages from the text, giving an in depth analysis of how the quote relates to the question.
-Those passages should be quoted word for word, avoiding the use of ellipsis to shorten the quote.
-Avoid quoting passages inline with your text, instead quote them on a new line.
-You should mention the source of the quote before quoting it.
-Do not quote the same passage twice.
-Do not list the quotes you used at the end of your answer.
-"""
+    structured_with_context_local: str = """Answer the user's question.
+Structure your responses with section headers and subtitles."""
+    structured_with_context_remote: str = """Answer the user's question.
+Structure your responses with section headers and subtitles."""
     answer_in_french: str = "Répondez à la question en français."
     question_intro_en: str = "HERE IS THE QUESTION"
     question_intro_fr: str = "VOICI LA QUESTION"
