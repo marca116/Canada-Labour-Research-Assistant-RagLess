@@ -5,7 +5,7 @@ import time
 
 import streamlit as st
 
-from config import ChatbotInterfaceConfig, PromptTemplateType, OllamaModelConfig, ConsoleConfig
+from config import ChatbotInterfaceConfig, PromptTemplateType, OllamaModelConfig
 from local import get_ollama_answer_local, get_ollama_answer_local_stream
 from local_vllm import get_vllm_answer, get_vllm_answer_stream
 from remote import get_llm_answer_remote, get_llm_answer_remote_stream
@@ -26,7 +26,7 @@ def get_prompt_template(custom_system_prompt, is_remote, language):
     return prompt_template
 
 # @st.cache_data(show_spinner=False, ttl=600)
-def retrieve_database(database_question,
+def retrieve_messages(user_question,
                       language,
                       is_remote,
                       chat_model,
@@ -46,7 +46,7 @@ def retrieve_database(database_question,
     # Text prompts
     prompt = prompt_template_type
     question_intro = PromptTemplateType.question_intro_en if language == "en" else PromptTemplateType.question_intro_fr
-    prompt_question = "\n\n" + question_intro + ": " + database_question
+    prompt_question = "\n\n" + question_intro + ": " + user_question
 
     prompt_message = {
         'role': 'user',
@@ -88,7 +88,7 @@ def retrieve_database(database_question,
     return messages, chat_model, hyperparams
 
 @st.cache_data(show_spinner=False, ttl=600)
-def retrieve_database_local(database_question,
+def retrieve_answer_local(question,
                       language,
                       is_remote=False,
                       chat_model=None,
@@ -98,8 +98,8 @@ def retrieve_database_local(database_question,
                       nb_previous_questions=1,
                       engine="ollama"):
     
-    messages, chat_model, hyperparams = retrieve_database(
-        database_question, language, is_remote, chat_model, hyperparams, 
+    messages, chat_model, hyperparams = retrieve_messages(
+        question, language, is_remote, chat_model, hyperparams, 
         custom_system_prompt, previous_messages, nb_previous_questions
     )
 
@@ -112,7 +112,7 @@ def retrieve_database_local(database_question,
 
     return answer
 
-def retrieve_database_stream(database_question,
+def retrieve_answer_stream(question,
                       language,
                       is_remote=False,
                       chat_model=None,
@@ -122,8 +122,8 @@ def retrieve_database_stream(database_question,
                       nb_previous_questions=1,
                       engine="ollama"):
     
-    messages, chat_model, hyperparams = retrieve_database(
-        database_question, language, is_remote, chat_model, hyperparams, 
+    messages, chat_model, hyperparams = retrieve_messages(
+        question, language, is_remote, chat_model, hyperparams, 
         custom_system_prompt, previous_messages, nb_previous_questions
     )
 
@@ -135,13 +135,12 @@ def retrieve_database_stream(database_question,
         stream_generator = get_vllm_answer_stream(chat_model, messages, hyperparams)
 
     return stream_generator
-    
 
 if __name__ == "__main__":
     from config import vLLMModelConfig, vLLMChatbotInterfaceConfig
 
     start_time = time.time()
-    answer, _, _, _, original_answer = retrieve_database_local(
+    answer, _, _, _, original_answer = retrieve_answer_local(
         "How do you change your password in WEIMS?", 
         "en", 
         is_remote=False, 

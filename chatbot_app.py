@@ -4,7 +4,7 @@ import logging
 import streamlit as st
 
 from config import BaseChatbotInterfaceConfig, ChatbotInterfaceConfig, vLLMChatbotInterfaceConfig, vLLMModelConfig, OllamaModelConfig
-from tools import retrieve_database_stream
+from tools import retrieve_answer_stream
 from translations import Translator
 
 logging.basicConfig(filename='.debugging/debugging.log', level=logging.DEBUG)
@@ -114,7 +114,7 @@ class App:
             if st.session_state.messages and st.session_state.messages[-1]["role"] == "user":
 
                 with st.spinner(self.translator.get('processing'), show_time=False):
-                    result_generator = retrieve_database_stream(
+                    result_generator = retrieve_answer_stream(
                         st.session_state.messages[-1]["content"],
                         language=st.session_state.language,
                         is_remote=self.is_remote,
@@ -143,8 +143,8 @@ class App:
                     with st.container():
                         st.write_stream(stream_capture)
                         
-                        # Get the captured answer
-                        answer = stream_capture.full_answer
+                    # Get the captured answer
+                    answer = stream_capture.full_answer
 
                     st.session_state.messages.append({"role": "assistant", "content": answer, "nb_previous_questions": self.nb_previous_questions})
 
