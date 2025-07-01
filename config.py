@@ -1,29 +1,4 @@
 from dataclasses import dataclass, field
-from chromadb import EmbeddingFunction
-from sentence_transformers import SentenceTransformer
-
-class CustomEmbeddingFunction(EmbeddingFunction):
-
-    def __init__(self, model_name, trust_remote_code=False):
-        super().__init__()
-        self.model_name = model_name
-        self.trust_remote_code = trust_remote_code
-    
-    def __call__(self, input_):
-        embeddings =SentenceTransformer(self.model_name, trust_remote_code=self.trust_remote_code).encode(input_)
-        return embeddings
-
-@dataclass
-class ChromaDBSettings:
-    directory_path="./chroma_vectorDB"
-    embedding_model="multi-qa-mpnet-base-dot-v1"
-    anonymized_telemetry=False
-    collections = {"bilingual_embed_large": "Mar082025_BilingualEmbedLarge",
-                    "multi_qa_mpnet":"multi-qa-mpnet-base-dot-v1",
-                   "snowflake_arctic":"Labour_Program_Feb192025_snowflake_arctic_embed_m_v2"}
-    nb_docs_to_prioritize_multiplier = 3
-    nb_docs_returned = 5
-    trust_remote_code=True
 
 @dataclass
 class BaseChatbotInterfaceConfig:
@@ -34,8 +9,7 @@ class BaseChatbotInterfaceConfig:
     default_model_remote: str = ""
     models_shortlist_remote: list = field(default_factory=list)
     language: str = ""
-    nb_previous_questions: int = 0
-    db_name: str = ""
+    nb_previous_questions: int = 10
 
 @dataclass
 class ChatbotInterfaceConfig(BaseChatbotInterfaceConfig):
@@ -49,8 +23,7 @@ class ChatbotInterfaceConfig(BaseChatbotInterfaceConfig):
     default_model_remote = "meta-llama/Llama-4-Scout-17B-16E-Instruct"
     models_shortlist_remote = [default_model_remote]
     language = "en"
-    nb_previous_questions = 0
-    db_name = "labour"
+    nb_previous_questions = 10
 
 @dataclass
 class vLLMChatbotInterfaceConfig(BaseChatbotInterfaceConfig):
@@ -61,24 +34,7 @@ class vLLMChatbotInterfaceConfig(BaseChatbotInterfaceConfig):
     default_model_remote = "meta-llama/Llama-4-Scout-17B-16E-Instruct"
     models_shortlist_remote = ["meta-llama/Llama-4-Scout-17B-16E-Instruct"]
     language = "en"
-    nb_previous_questions = 0
-    db_name = "labour"
-
-@dataclass
-class Evaluation:
-    summac={"models":["vitc"],
-            "bins":'percentile',
-            'granularity':'sentence',
-            'nli_labels':'e',
-            'device':'cuda',
-            'start_file':'.models/summac_conv_vitc_sent_perc_e.bin',
-            'agg':'mean'}
-
-@dataclass
-class QuotationsConfig:
-    threshold_rouge_score = 0.5 # Determine how close to the LCS in the source documents a quote has to be in order to be replaced by it (that is, in order to create a colored citation).
-    min_non_header_words_in_quote = 9
-    direct_quotations_mode = True
+    nb_previous_questions = 10
 
 @dataclass
 class PromptTemplateType:

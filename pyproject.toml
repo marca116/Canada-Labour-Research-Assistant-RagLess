@@ -11,19 +11,9 @@ description = 'RAG-powered AI Research Assistant leveraging a ChromaDB vector da
 readme = 'README.md'
 requires-python = '== 3.12.*'
 dependencies = [
-    'beautifulsoup4==4.13.4',
-    'chromadb==1.0.12',
-    'nltk==3.9.1',
     'ollama==0.4.2',
     'protobuf==4.25.8',
-    'pymupdf4llm==0.0.25',
-    'sentencepiece==0.2.0',
-    'sentence-transformers==3.0.1',
-    'streamlit==1.45.1',
-    'summac==0.0.4',
-    'transformers>=4.8.1',
-    # adapt the version you need according to your available compute resources
-    "torch==2.7.1+cu128",
+    'streamlit==1.45.1'
     ]
 
 [tool.setuptools.packages.find]
